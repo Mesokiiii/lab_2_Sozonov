@@ -4,12 +4,17 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:views="clr-namespace:WpfLabApp.Views"
+        xmlns:vm="clr-namespace:WpfLabApp.ViewModels"
         mc:Ignorable="d"
-        Title="Лабораторная работа №1 - Элементы подсистемы WPF"
+        Title="Лабораторная работа №2 - WPF, MVVM, Привязки и Команды"
         Height="850" Width="1200"
         MinHeight="650" MinWidth="950"
         WindowStartupLocation="CenterScreen"
         Background="{StaticResource BgBrush}">
+
+    <Window.DataContext>
+        <vm:MainWindowViewModel />
+    </Window.DataContext>
 
     <Grid>
         <Grid.RowDefinitions>
@@ -26,17 +31,17 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <StackPanel Orientation="Vertical">
-                    <TextBlock Text="Лабораторная работа №1" FontSize="20" FontWeight="Bold" Foreground="{StaticResource TextPrimaryBrush}"/>
-                    <TextBlock Text="Исследование базовых элементов подсистемы WPF и контейнеров компоновки" FontSize="13" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,2,0,0"/>
+                    <TextBlock Text="Лабораторная работа №2" FontSize="20" FontWeight="Bold" Foreground="{StaticResource TextPrimaryBrush}"/>
+                    <TextBlock Text="WPF • Библиотека ресурсов • Привязки (Binding), Команды (ICommand) и паттерн MVVM" FontSize="13" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,2,0,0"/>
                 </StackPanel>
                 <Border Grid.Column="1" Background="#1E1B4B" CornerRadius="6" Padding="10,6" BorderBrush="{StaticResource AccentBrush}" BorderThickness="1" VerticalAlignment="Center">
-                    <TextBlock Text="WPF • .NET 8 • C#" Foreground="{StaticResource AccentBrush}" FontWeight="SemiBold" FontSize="12"/>
+                    <TextBlock Text="WPF • MVVM • .NET 8" Foreground="{StaticResource AccentBrush}" FontWeight="SemiBold" FontSize="12"/>
                 </Border>
             </Grid>
         </Border>
 
         <!-- Main TabControl -->
-        <TabControl Grid.Row="1" Margin="16" Background="Transparent" BorderThickness="0">
+        <TabControl Grid.Row="1" Margin="16" Background="Transparent" BorderThickness="0" SelectedIndex="{Binding SelectedTabIndex, Mode=TwoWay}">
             <TabControl.Resources>
                 <Style TargetType="TabItem">
                     <Setter Property="FontSize" Value="14"/>
@@ -100,13 +105,20 @@
                     <views:LayoutContainersTabView />
                 </Border>
             </TabItem>
+
+            <!-- 2.1 Привязки и режимы обновления -->
+            <TabItem Header="2.1. Привязки и режимы">
+                <Border Background="{StaticResource BgCardBrush}" BorderBrush="{StaticResource BorderBrushDefault}" BorderThickness="1" CornerRadius="0,8,8,8" Padding="10">
+                    <views:BindingsTabView />
+                </Border>
+            </TabItem>
         </TabControl>
 
         <!-- Status Bar -->
         <Border Grid.Row="2" Background="{StaticResource BgCardBrush}" BorderBrush="{StaticResource BorderBrushDefault}" BorderThickness="0,1,0,0" Padding="16,6">
             <Grid>
-                <TextBlock Text="Готово • Выберите вкладку для перехода к элементам лабораторной работы" Foreground="{StaticResource TextMutedBrush}" FontSize="12"/>
-                <TextBlock HorizontalAlignment="Right" Text="Статус: Все модули подключены" Foreground="{StaticResource SuccessBrush}" FontSize="12" FontWeight="SemiBold"/>
+                <TextBlock Text="{Binding StatusMessage}" Foreground="{StaticResource TextMutedBrush}" FontSize="12"/>
+                <TextBlock HorizontalAlignment="Right" Text="Статус: MVVM + WpfLabResources активны" Foreground="{StaticResource SuccessBrush}" FontSize="12" FontWeight="SemiBold"/>
             </Grid>
         </Border>
     </Grid>

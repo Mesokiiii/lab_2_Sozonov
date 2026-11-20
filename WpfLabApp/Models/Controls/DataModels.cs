@@ -172,15 +172,82 @@ namespace WpfLabApp.Models
     /// </summary>
     public class DataGridSampleItem : INotifyPropertyChanged
     {
+        private int _id;
+        private string _name = string.Empty;
+        private string _category = string.Empty;
+        private DateTime _date;
         private bool _isActive;
         private string _status = string.Empty;
         private StatusCategory _statusType;
 
-        public int Id { get; set; }
-        public string Name { get; set; } = string.Empty;
-        public string Category { get; set; } = string.Empty;
-        public DateTime Date { get; set; }
+        public int Id
+        {
+            get => _id;
+            set
+            {
+                if (_id != value)
+                {
+                    _id = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public string Name
+        {
+            get => _name;
+            set
+            {
+                if (_name != value)
+                {
+                    _name = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public string Category
+        {
+            get => _category;
+            set
+            {
+                if (_category != value)
+                {
+                    _category = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public DateTime Date
+        {
+            get => _date;
+            set
+            {
+                if (_date != value)
+                {
+                    _date = value;
+                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(FormattedDate));
+                }
+            }
+        }
+
         public string FormattedDate => Date.ToString("dd.MM.yyyy HH:mm");
+
+        public DataGridSampleItem Clone()
+        {
+            return new DataGridSampleItem
+            {
+                Id = Id,
+                Name = Name,
+                Category = Category,
+                Status = Status,
+                StatusType = StatusType,
+                Date = Date,
+                IsActive = IsActive
+            };
+        }
 
         public StatusCategory StatusType
         {

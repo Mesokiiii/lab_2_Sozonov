@@ -3,10 +3,17 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:vm="clr-namespace:WpfLabApp.ViewModels"
+             xmlns:conv="clr-namespace:WpfLabApp.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="1800" d:DesignWidth="1100">
 
+    <UserControl.DataContext>
+        <vm:LayoutContainersViewModel/>
+    </UserControl.DataContext>
+
     <UserControl.Resources>
+        <conv:EqualityToBooleanConverter x:Key="EqualityToBoolConverter"/>
         <!-- Common Container Card Style -->
         <Style x:Key="ContainerCardStyle" TargetType="Border">
             <Setter Property="Background" Value="{StaticResource BgCardBrush}"/>
@@ -80,6 +87,23 @@
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="BorderBrush" Value="#FFFFFF33"/>
             <Setter Property="SnapsToDevicePixels" Value="True"/>
+        </Style>
+
+        <!-- Dynamic StackPanel Block Style (Orientation & Fixed Sizes) -->
+        <Style x:Key="StackDemoBlockStyle" TargetType="Border" BasedOn="{StaticResource DemoBlockBase}">
+            <Setter Property="Margin" Value="4"/>
+            <Setter Property="Padding" Value="10,4"/>
+            <Setter Property="Height" Value="44"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding StackOrientation}" Value="Horizontal">
+                    <Setter Property="Width" Value="140"/>
+                    <Setter Property="Height" Value="85"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding IsFixedStackSizes}" Value="True">
+                    <Setter Property="Width" Value="140"/>
+                    <Setter Property="Height" Value="50"/>
+                </DataTrigger>
+            </Style.Triggers>
         </Style>
 
         <!-- Nav Button Style -->
@@ -189,9 +213,9 @@
                     <Border Grid.Row="1" Background="#0F172A" BorderBrush="{StaticResource BorderBrushDefault}" BorderThickness="1" CornerRadius="6" Padding="12,8" Margin="0,0,0,14">
                         <WrapPanel VerticalAlignment="Center">
                             <TextBlock Text="Ориентация (Orientation):" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,0,14,0"/>
-                            <RadioButton x:Name="RbStackVertical" Content="Вертикальная (Vertical)" IsChecked="True" GroupName="StackOrientation" Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center" Margin="0,0,16,0" Checked="StackOrientation_Checked"/>
-                            <RadioButton x:Name="RbStackHorizontal" Content="Горизонтальная (Horizontal)" GroupName="StackOrientation" Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center" Margin="0,0,16,0" Checked="StackOrientation_Checked"/>
-                            <CheckBox x:Name="CbStackFixedSizes" Content="Фиксировать размеры блоков" Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center" Checked="StackFixedSizes_Toggle" Unchecked="StackFixedSizes_Toggle"/>
+                            <RadioButton x:Name="RbStackVertical" Content="Вертикальная (Vertical)" IsChecked="{Binding StackOrientation, Mode=TwoWay, Converter={StaticResource EqualityToBoolConverter}, ConverterParameter=Vertical}" GroupName="StackOrientation" Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center" Margin="0,0,16,0"/>
+                            <RadioButton x:Name="RbStackHorizontal" Content="Горизонтальная (Horizontal)" IsChecked="{Binding StackOrientation, Mode=TwoWay, Converter={StaticResource EqualityToBoolConverter}, ConverterParameter=Horizontal}" GroupName="StackOrientation" Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center" Margin="0,0,16,0"/>
+                            <CheckBox x:Name="CbStackFixedSizes" Content="Фиксировать размеры блоков" IsChecked="{Binding IsFixedStackSizes, Mode=TwoWay}" Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
                         </WrapPanel>
                     </Border>
 
@@ -206,9 +230,9 @@
                         <!-- Left: Visual Playground -->
                         <Border Grid.Column="0" Style="{StaticResource PlaygroundFrameStyle}" MinHeight="260">
                             <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                                <StackPanel x:Name="DemoStackPanel" Orientation="Vertical">
+                                <StackPanel x:Name="DemoStackPanel" Orientation="{Binding StackOrientation}">
                                     <!-- Block 1: Primary -->
-                                    <Border x:Name="StackBlock1" Background="{StaticResource PrimaryBrush}" Style="{StaticResource DemoBlockBase}" Margin="4" Height="44" Padding="10,4">
+                                    <Border x:Name="StackBlock1" Background="{StaticResource PrimaryBrush}" Style="{StaticResource StackDemoBlockStyle}">
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*"/>
@@ -222,7 +246,7 @@
                                         </Grid>
                                     </Border>
                                     <!-- Block 2: Accent -->
-                                    <Border x:Name="StackBlock2" Background="{StaticResource AccentBrush}" Style="{StaticResource DemoBlockBase}" Margin="4" Height="44" Padding="10,4">
+                                    <Border x:Name="StackBlock2" Background="{StaticResource AccentBrush}" Style="{StaticResource StackDemoBlockStyle}">
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*"/>
@@ -236,7 +260,7 @@
                                         </Grid>
                                     </Border>
                                     <!-- Block 3: Success -->
-                                    <Border x:Name="StackBlock3" Background="{StaticResource SuccessBrush}" Style="{StaticResource DemoBlockBase}" Margin="4" Height="44" Padding="10,4">
+                                    <Border x:Name="StackBlock3" Background="{StaticResource SuccessBrush}" Style="{StaticResource StackDemoBlockStyle}">
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*"/>
@@ -250,7 +274,7 @@
                                         </Grid>
                                     </Border>
                                     <!-- Block 4: Info -->
-                                    <Border x:Name="StackBlock4" Background="{StaticResource InfoBrush}" Style="{StaticResource DemoBlockBase}" Margin="4" Height="44" Padding="10,4">
+                                    <Border x:Name="StackBlock4" Background="{StaticResource InfoBrush}" Style="{StaticResource StackDemoBlockStyle}">
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*"/>
@@ -264,7 +288,7 @@
                                         </Grid>
                                     </Border>
                                     <!-- Block 5: Error -->
-                                    <Border x:Name="StackBlock5" Background="{StaticResource ErrorBrush}" Style="{StaticResource DemoBlockBase}" Margin="4" Height="44" Padding="10,4">
+                                    <Border x:Name="StackBlock5" Background="{StaticResource ErrorBrush}" Style="{StaticResource StackDemoBlockStyle}">
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*"/>
@@ -337,7 +361,7 @@
                     <Border Grid.Row="1" Background="#0F172A" BorderBrush="{StaticResource BorderBrushDefault}" BorderThickness="1" CornerRadius="6" Padding="12,8" Margin="0,0,0,14">
                         <WrapPanel VerticalAlignment="Center">
                             <TextBlock Text="Настройки сетки:" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,0,14,0"/>
-                            <CheckBox x:Name="CbShowGridLines" Content="Показать линии сетки (ShowGridLines)" Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center" Margin="0,0,20,0" Checked="GridLines_Toggle" Unchecked="GridLines_Toggle"/>
+                            <CheckBox x:Name="CbShowGridLines" Content="Показать линии сетки (ShowGridLines)" IsChecked="{Binding ShowGridLines, Mode=TwoWay}" Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center" Margin="0,0,20,0"/>
                             <TextBlock Text="Типы размеров: Auto (по содержимому), * (пропорционально), px (абсолютно)" Foreground="{StaticResource TextMutedBrush}" VerticalAlignment="Center" FontSize="12"/>
                         </WrapPanel>
                     </Border>
@@ -353,7 +377,7 @@
                         <!-- Left: Visual Playground -->
                         <Border Grid.Column="0" Style="{StaticResource PlaygroundFrameStyle}" Height="340">
                             <!-- 3 Rows x 3 Columns Demo Grid -->
-                            <Grid x:Name="DemoGrid" ShowGridLines="False">
+                            <Grid x:Name="DemoGrid" ShowGridLines="{Binding ShowGridLines}">
                                 <Grid.RowDefinitions>
                                     <!-- Row 0: Auto -->
                                     <RowDefinition Height="Auto"/>
@@ -495,13 +519,13 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" Text="Ширина контейнера:" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                            <Slider Grid.Column="1" x:Name="WrapWidthSlider" Minimum="200" Maximum="620" Value="420" VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="2" Text="{Binding ElementName=WrapWidthSlider, Path=Value, StringFormat={}{0:0} px}" Foreground="{StaticResource AccentBrush}" FontWeight="Bold" VerticalAlignment="Center" Margin="8,0,20,0" Width="55"/>
+                            <Slider Grid.Column="1" x:Name="WrapWidthSlider" Minimum="200" Maximum="620" Value="{Binding WrapPanelWidth, Mode=TwoWay}" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="2" Text="{Binding WrapPanelWidth, StringFormat={}{0:0} px}" Foreground="{StaticResource AccentBrush}" FontWeight="Bold" VerticalAlignment="Center" Margin="8,0,20,0" Width="55"/>
 
                             <StackPanel Grid.Column="3" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right">
                                 <TextBlock Text="Ориентация:" Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center" Margin="0,0,8,0"/>
-                                <RadioButton x:Name="RbWrapHorizontal" Content="Горизонтальная" IsChecked="True" GroupName="WrapOrient" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,10,0" VerticalAlignment="Center" Checked="WrapOrientation_Checked"/>
-                                <RadioButton x:Name="RbWrapVertical" Content="Вертикальная" GroupName="WrapOrient" Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center" Checked="WrapOrientation_Checked"/>
+                                <RadioButton x:Name="RbWrapHorizontal" Content="Горизонтальная" IsChecked="{Binding WrapOrientation, Mode=TwoWay, Converter={StaticResource EqualityToBoolConverter}, ConverterParameter=Horizontal}" GroupName="WrapOrient" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                                <RadioButton x:Name="RbWrapVertical" Content="Вертикальная" IsChecked="{Binding WrapOrientation, Mode=TwoWay, Converter={StaticResource EqualityToBoolConverter}, ConverterParameter=Vertical}" GroupName="WrapOrient" Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Grid>
                     </Border>
@@ -519,10 +543,20 @@
                             <StackPanel VerticalAlignment="Top">
                                 <TextBlock Text="Потяните слайдер выше, чтобы изменить ширину рамки и наблюдать живой перенос блоков:" Foreground="{StaticResource TextMutedBrush}" FontSize="11" Margin="0,0,0,8"/>
                                 
-                                <!-- Container whose width is bound to Slider -->
+                                <!-- Container whose width and orientation are bound to ViewModel -->
                                 <Border x:Name="WrapContainerBorder" Background="#162032" BorderBrush="{StaticResource AccentBrush}" BorderThickness="1.5" CornerRadius="6" Padding="6" HorizontalAlignment="Left"
-                                        Width="{Binding ElementName=WrapWidthSlider, Path=Value}" MinHeight="180">
-                                    <WrapPanel x:Name="DemoWrapPanel" Orientation="Horizontal">
+                                        Width="{Binding WrapPanelWidth}">
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Setter Property="MinHeight" Value="180"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding WrapOrientation}" Value="Vertical">
+                                                    <Setter Property="Height" Value="180"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                    <WrapPanel x:Name="DemoWrapPanel" Orientation="{Binding WrapOrientation}">
                                         <!-- Item 1 Primary -->
                                         <Border Width="110" Height="50" Background="{StaticResource PrimaryBrush}" Style="{StaticResource DemoBlockBase}" Margin="4" Padding="6">
                                             <StackPanel VerticalAlignment="Center">
@@ -640,7 +674,7 @@
                     <Border Grid.Row="1" Background="#0F172A" BorderBrush="{StaticResource BorderBrushDefault}" BorderThickness="1" CornerRadius="6" Padding="12,8" Margin="0,0,0,14">
                         <WrapPanel VerticalAlignment="Center">
                             <TextBlock Text="Управление свойством LastChildFill:" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,0,14,0"/>
-                            <CheckBox x:Name="CbLastChildFill" Content="LastChildFill=&quot;True&quot; (Последний элемент заполняет весь остаток пространства)" IsChecked="True" Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center" Margin="0,0,20,0" Checked="LastChildFill_Toggle" Unchecked="LastChildFill_Toggle"/>
+                            <CheckBox x:Name="CbLastChildFill" Content="LastChildFill=&quot;True&quot; (Последний элемент заполняет весь остаток пространства)" IsChecked="{Binding LastChildFill, Mode=TwoWay}" Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center" Margin="0,0,20,0"/>
                         </WrapPanel>
                     </Border>
 
@@ -655,7 +689,7 @@
                         <!-- Left: Visual Playground -->
                         <Border Grid.Column="0" Style="{StaticResource PlaygroundFrameStyle}" Height="320">
                             <!-- DockPanel Demonstration -->
-                            <DockPanel x:Name="DemoDockPanel" LastChildFill="True">
+                            <DockPanel x:Name="DemoDockPanel" LastChildFill="{Binding LastChildFill}">
                                 <!-- Top Dock: Primary -->
                                 <Border DockPanel.Dock="Top" Height="44" Background="{StaticResource PrimaryBrush}" Style="{StaticResource DemoBlockBase}" Margin="3" Padding="10,0">
                                     <Grid>
@@ -771,16 +805,16 @@
                             </Grid.ColumnDefinitions>
                             <!-- X Slider -->
                             <TextBlock Grid.Column="0" Text="Позиция X (Left):" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,0,8,0"/>
-                            <Slider Grid.Column="1" x:Name="CanvasXSlider" Minimum="10" Maximum="320" Value="140" VerticalAlignment="Center" ValueChanged="CanvasSliders_ValueChanged"/>
+                            <Slider Grid.Column="1" x:Name="CanvasXSlider" Minimum="10" Maximum="320" Value="{Binding CanvasX, Mode=TwoWay}" VerticalAlignment="Center"/>
                             <!-- Y Slider -->
                             <TextBlock Grid.Column="2" Text="Позиция Y (Top):" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="SemiBold" VerticalAlignment="Center" Margin="14,0,8,0"/>
-                            <Slider Grid.Column="3" x:Name="CanvasYSlider" Minimum="10" Maximum="160" Value="60" VerticalAlignment="Center" ValueChanged="CanvasSliders_ValueChanged"/>
+                            <Slider Grid.Column="3" x:Name="CanvasYSlider" Minimum="10" Maximum="160" Value="{Binding CanvasY, Mode=TwoWay}" VerticalAlignment="Center"/>
 
                             <StackPanel Grid.Column="4" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
                                 <TextBlock Text="Координаты блока: X=" Foreground="{StaticResource TextSecondaryBrush}" FontSize="11"/>
-                                <TextBlock Text="{Binding ElementName=CanvasXSlider, Path=Value, StringFormat={}{0:0}}" Foreground="{StaticResource InfoBrush}" FontWeight="Bold" FontSize="11"/>
+                                <TextBlock Text="{Binding CanvasX, StringFormat={}{0:0}}" Foreground="{StaticResource InfoBrush}" FontWeight="Bold" FontSize="11"/>
                                 <TextBlock Text=" px, Y=" Foreground="{StaticResource TextSecondaryBrush}" FontSize="11"/>
-                                <TextBlock Text="{Binding ElementName=CanvasYSlider, Path=Value, StringFormat={}{0:0}}" Foreground="{StaticResource InfoBrush}" FontWeight="Bold" FontSize="11"/>
+                                <TextBlock Text="{Binding CanvasY, StringFormat={}{0:0}}" Foreground="{StaticResource InfoBrush}" FontWeight="Bold" FontSize="11"/>
                                 <TextBlock Text=" px" Foreground="{StaticResource TextSecondaryBrush}" FontSize="11"/>
                             </StackPanel>
                         </Grid>
@@ -833,7 +867,7 @@
                                 </Border>
 
                                 <!-- Block 5: Interactive Floating Accent Block with high ZIndex -->
-                                <Border x:Name="InteractiveCanvasBlock" Canvas.Left="140" Canvas.Top="60" Panel.ZIndex="10" Width="150" Height="65" Background="{StaticResource AccentBrush}" CornerRadius="8" BorderThickness="2" BorderBrush="#FFFFFF" Padding="8">
+                                <Border x:Name="InteractiveCanvasBlock" Canvas.Left="{Binding CanvasX}" Canvas.Top="{Binding CanvasY}" Panel.ZIndex="10" Width="150" Height="65" Background="{StaticResource AccentBrush}" CornerRadius="8" BorderThickness="2" BorderBrush="#FFFFFF" Padding="8">
                                     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                                         <TextBlock Text="🎮 Управляемый блок" Foreground="White" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center"/>
                                         <TextBlock Text="ZIndex=&quot;10&quot; (Поверх других)" Foreground="#EDE9FE" FontSize="10" HorizontalAlignment="Center"/>
@@ -902,10 +936,10 @@
                     <Border Grid.Row="1" Background="#0F172A" BorderBrush="{StaticResource BorderBrushDefault}" BorderThickness="1" CornerRadius="6" Padding="12,8" Margin="0,0,0,14">
                         <WrapPanel VerticalAlignment="Center">
                             <TextBlock Text="Количество столбцов (Columns):" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,0,14,0"/>
-                            <RadioButton x:Name="RbUniCols2" Content="2 колонки" GroupName="UniCols" Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center" Margin="0,0,12,0" Checked="UniformGridCols_Checked"/>
-                            <RadioButton x:Name="RbUniCols3" Content="3 колонки" IsChecked="True" GroupName="UniCols" Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center" Margin="0,0,12,0" Checked="UniformGridCols_Checked"/>
-                            <RadioButton x:Name="RbUniCols4" Content="4 колонки" GroupName="UniCols" Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center" Margin="0,0,12,0" Checked="UniformGridCols_Checked"/>
-                            <RadioButton x:Name="RbUniCols6" Content="6 колонок" GroupName="UniCols" Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center" Margin="0,0,12,0" Checked="UniformGridCols_Checked"/>
+                            <RadioButton x:Name="RbUniCols2" Content="2 колонки" IsChecked="{Binding UniformGridColumns, Mode=TwoWay, Converter={StaticResource EqualityToBoolConverter}, ConverterParameter=2}" GroupName="UniCols" Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                            <RadioButton x:Name="RbUniCols3" Content="3 колонки" IsChecked="{Binding UniformGridColumns, Mode=TwoWay, Converter={StaticResource EqualityToBoolConverter}, ConverterParameter=3}" GroupName="UniCols" Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                            <RadioButton x:Name="RbUniCols4" Content="4 колонки" IsChecked="{Binding UniformGridColumns, Mode=TwoWay, Converter={StaticResource EqualityToBoolConverter}, ConverterParameter=4}" GroupName="UniCols" Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                            <RadioButton x:Name="RbUniCols6" Content="6 колонок" IsChecked="{Binding UniformGridColumns, Mode=TwoWay, Converter={StaticResource EqualityToBoolConverter}, ConverterParameter=6}" GroupName="UniCols" Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center" Margin="0,0,12,0"/>
                         </WrapPanel>
                     </Border>
 
@@ -920,7 +954,7 @@
                         <!-- Left: Visual Playground -->
                         <Border Grid.Column="0" Style="{StaticResource PlaygroundFrameStyle}" Height="300">
                             <!-- UniformGrid with 3 columns by default -->
-                            <UniformGrid x:Name="DemoUniformGrid" Columns="3">
+                            <UniformGrid x:Name="DemoUniformGrid" Columns="{Binding UniformGridColumns}">
                                 <!-- Cell 1 Primary -->
                                 <Border Background="{StaticResource PrimaryBrush}" Style="{StaticResource DemoBlockBase}" Margin="3" Padding="8">
                                     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">

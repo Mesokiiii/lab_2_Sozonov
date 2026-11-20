@@ -3,8 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:vm="clr-namespace:WpfLabApp.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="1400" d:DesignWidth="1100">
+
+    <UserControl.DataContext>
+        <vm:ColorPaletteViewModel/>
+    </UserControl.DataContext>
 
     <UserControl.Resources>
         <!-- Modern GroupBox Style -->
@@ -317,8 +322,8 @@
                                 <TextBlock Text="Роль: Основной цвет приложения. Применяется для активных вкладок, главных кнопок действий, рамок фокуса ввода и брендовых заголовков." FontSize="12" Foreground="#94A3B8" TextWrapping="Wrap" Margin="0,0,0,8"/>
 
                                 <StackPanel Orientation="Horizontal">
-                                    <Button Style="{StaticResource ActionButtonStyle}" Content="Копировать HEX" Margin="0,0,6,0" Click="CopyHex_Click" CommandParameter="#3B82F6"/>
-                                    <Button Style="{StaticResource ActionButtonStyle}" Content="Копировать RGB" Click="CopyRgb_Click" CommandParameter="rgb(59, 130, 246)"/>
+                                    <Button Style="{StaticResource ActionButtonStyle}" Content="Копировать HEX" Margin="0,0,6,0" Command="{Binding CopyHexCommand}" CommandParameter="#3B82F6"/>
+                                    <Button Style="{StaticResource ActionButtonStyle}" Content="Копировать RGB" Command="{Binding CopyRgbCommand}" CommandParameter="rgb(59, 130, 246)"/>
                                 </StackPanel>
                             </StackPanel>
                         </Grid>
@@ -369,8 +374,8 @@
                                 <TextBlock Text="Роль: Акцентный цвет для вторичных интерактивных элементов, бейджей категорий, переключателей, декоративных градиентов и тегов." FontSize="12" Foreground="#94A3B8" TextWrapping="Wrap" Margin="0,0,0,8"/>
 
                                 <StackPanel Orientation="Horizontal">
-                                    <Button Style="{StaticResource ActionButtonStyle}" Content="Копировать HEX" Margin="0,0,6,0" Click="CopyHex_Click" CommandParameter="#8B5CF6"/>
-                                    <Button Style="{StaticResource ActionButtonStyle}" Content="Копировать RGB" Click="CopyRgb_Click" CommandParameter="rgb(139, 92, 246)"/>
+                                    <Button Style="{StaticResource ActionButtonStyle}" Content="Копировать HEX" Margin="0,0,6,0" Command="{Binding CopyHexCommand}" CommandParameter="#8B5CF6"/>
+                                    <Button Style="{StaticResource ActionButtonStyle}" Content="Копировать RGB" Command="{Binding CopyRgbCommand}" CommandParameter="rgb(139, 92, 246)"/>
                                 </StackPanel>
                             </StackPanel>
                         </Grid>
@@ -423,8 +428,8 @@
                                 <TextBlock Text="Роль: Подтверждение действий, валидные поля формы, положительный статус выполнения и бейджи готовности." FontSize="11.5" Foreground="#94A3B8" TextWrapping="Wrap" Margin="0,0,0,10" MinHeight="48"/>
 
                                 <StackPanel Orientation="Horizontal">
-                                    <Button Style="{StaticResource ActionButtonStyle}" Content="HEX" Margin="0,0,6,0" Click="CopyHex_Click" CommandParameter="#10B981"/>
-                                    <Button Style="{StaticResource ActionButtonStyle}" Content="RGB" Click="CopyRgb_Click" CommandParameter="rgb(16, 185, 129)"/>
+                                    <Button Style="{StaticResource ActionButtonStyle}" Content="HEX" Margin="0,0,6,0" Command="{Binding CopyHexCommand}" CommandParameter="#10B981"/>
+                                    <Button Style="{StaticResource ActionButtonStyle}" Content="RGB" Command="{Binding CopyRgbCommand}" CommandParameter="rgb(16, 185, 129)"/>
                                 </StackPanel>
                             </StackPanel>
                         </Border>
@@ -454,8 +459,8 @@
                                 <TextBlock Text="Роль: Критические предупреждения, ошибки валидации, деструктивные действия (удаление) и аварийные алерты." FontSize="11.5" Foreground="#94A3B8" TextWrapping="Wrap" Margin="0,0,0,10" MinHeight="48"/>
 
                                 <StackPanel Orientation="Horizontal">
-                                    <Button Style="{StaticResource ActionButtonStyle}" Content="HEX" Margin="0,0,6,0" Click="CopyHex_Click" CommandParameter="#EF4444"/>
-                                    <Button Style="{StaticResource ActionButtonStyle}" Content="RGB" Click="CopyRgb_Click" CommandParameter="rgb(239, 68, 68)"/>
+                                    <Button Style="{StaticResource ActionButtonStyle}" Content="HEX" Margin="0,0,6,0" Command="{Binding CopyHexCommand}" CommandParameter="#EF4444"/>
+                                    <Button Style="{StaticResource ActionButtonStyle}" Content="RGB" Command="{Binding CopyRgbCommand}" CommandParameter="rgb(239, 68, 68)"/>
                                 </StackPanel>
                             </StackPanel>
                         </Border>
@@ -485,8 +490,8 @@
                                 <TextBlock Text="Роль: Информационные сообщения, всплывающие подсказки (тултипы), справочные карточки и системные уведомления." FontSize="11.5" Foreground="#94A3B8" TextWrapping="Wrap" Margin="0,0,0,10" MinHeight="48"/>
 
                                 <StackPanel Orientation="Horizontal">
-                                    <Button Style="{StaticResource ActionButtonStyle}" Content="HEX" Margin="0,0,6,0" Click="CopyHex_Click" CommandParameter="#06B6D4"/>
-                                    <Button Style="{StaticResource ActionButtonStyle}" Content="RGB" Click="CopyRgb_Click" CommandParameter="rgb(6, 182, 212)"/>
+                                    <Button Style="{StaticResource ActionButtonStyle}" Content="HEX" Margin="0,0,6,0" Command="{Binding CopyHexCommand}" CommandParameter="#06B6D4"/>
+                                    <Button Style="{StaticResource ActionButtonStyle}" Content="RGB" Command="{Binding CopyRgbCommand}" CommandParameter="rgb(6, 182, 212)"/>
                                 </StackPanel>
                             </StackPanel>
                         </Border>
@@ -539,7 +544,7 @@
                                             </ItemsControl.ItemsPanel>
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate>
-                                                    <Button Background="Transparent" BorderThickness="0" Padding="2" Click="SwatchButton_Click" Cursor="Hand" ToolTipService.ToolTip="{Binding Name}">
+                                                    <Button Background="Transparent" BorderThickness="0" Padding="2" Command="{Binding DataContext.SelectShadeCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}" Cursor="Hand" ToolTipService.ToolTip="{Binding Name}">
                                                         <Border Background="{Binding Brush}" CornerRadius="5" Height="42" BorderBrush="#334155" BorderThickness="1">
                                                             <TextBlock Text="{Binding Shade}" Foreground="{Binding TextBrush}" FontSize="11" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                                         </Border>
@@ -551,7 +556,7 @@
                                 </Border>
 
                                 <!-- Table 1 DataGrid -->
-                                <DataGrid ItemsSource="{Binding PrimaryGroup.Shades}" SelectionChanged="DataGrid_SelectionChanged" MaxHeight="430">
+                                <DataGrid ItemsSource="{Binding PrimaryGroup.Shades}" SelectedItem="{Binding SelectedColor, Mode=TwoWay}" MaxHeight="430">
                                     <DataGrid.Columns>
                                         <DataGridTemplateColumn Header="Образец цвета" Width="120">
                                             <DataGridTemplateColumn.CellTemplate>
@@ -628,7 +633,7 @@
                                             </ItemsControl.ItemsPanel>
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate>
-                                                    <Button Background="Transparent" BorderThickness="0" Padding="2" Click="SwatchButton_Click" Cursor="Hand" ToolTipService.ToolTip="{Binding Name}">
+                                                    <Button Background="Transparent" BorderThickness="0" Padding="2" Command="{Binding DataContext.SelectShadeCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}" Cursor="Hand" ToolTipService.ToolTip="{Binding Name}">
                                                         <Border Background="{Binding Brush}" CornerRadius="5" Height="42" BorderBrush="#334155" BorderThickness="1">
                                                             <TextBlock Text="{Binding Shade}" Foreground="{Binding TextBrush}" FontSize="11" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                                         </Border>
@@ -640,7 +645,7 @@
                                 </Border>
 
                                 <!-- Table 2 DataGrid -->
-                                <DataGrid ItemsSource="{Binding AccentGroup.Shades}" SelectionChanged="DataGrid_SelectionChanged" MaxHeight="430">
+                                <DataGrid ItemsSource="{Binding AccentGroup.Shades}" SelectedItem="{Binding SelectedColor, Mode=TwoWay}" MaxHeight="430">
                                     <DataGrid.Columns>
                                         <DataGridTemplateColumn Header="Образец цвета" Width="120">
                                             <DataGridTemplateColumn.CellTemplate>
@@ -715,7 +720,7 @@
                                             </ItemsControl.ItemsPanel>
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate>
-                                                    <Button Background="Transparent" BorderThickness="0" Padding="2" Click="SwatchButton_Click" Cursor="Hand" ToolTipService.ToolTip="{Binding Name}">
+                                                    <Button Background="Transparent" BorderThickness="0" Padding="2" Command="{Binding DataContext.SelectShadeCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}" Cursor="Hand" ToolTipService.ToolTip="{Binding Name}">
                                                         <Border Background="{Binding Brush}" CornerRadius="5" Height="42" BorderBrush="#334155" BorderThickness="1">
                                                             <TextBlock Text="{Binding Shade}" Foreground="{Binding TextBrush}" FontSize="11" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                                         </Border>
@@ -727,7 +732,7 @@
                                 </Border>
 
                                 <!-- Table 3 DataGrid -->
-                                <DataGrid ItemsSource="{Binding SuccessGroup.Shades}" SelectionChanged="DataGrid_SelectionChanged" MaxHeight="430">
+                                <DataGrid ItemsSource="{Binding SuccessGroup.Shades}" SelectedItem="{Binding SelectedColor, Mode=TwoWay}" MaxHeight="430">
                                     <DataGrid.Columns>
                                         <DataGridTemplateColumn Header="Образец цвета" Width="120">
                                             <DataGridTemplateColumn.CellTemplate>
@@ -802,7 +807,7 @@
                                             </ItemsControl.ItemsPanel>
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate>
-                                                    <Button Background="Transparent" BorderThickness="0" Padding="2" Click="SwatchButton_Click" Cursor="Hand" ToolTipService.ToolTip="{Binding Name}">
+                                                    <Button Background="Transparent" BorderThickness="0" Padding="2" Command="{Binding DataContext.SelectShadeCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}" Cursor="Hand" ToolTipService.ToolTip="{Binding Name}">
                                                         <Border Background="{Binding Brush}" CornerRadius="5" Height="42" BorderBrush="#334155" BorderThickness="1">
                                                             <TextBlock Text="{Binding Shade}" Foreground="{Binding TextBrush}" FontSize="11" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                                         </Border>
@@ -814,7 +819,7 @@
                                 </Border>
 
                                 <!-- Table 4 DataGrid -->
-                                <DataGrid ItemsSource="{Binding ErrorGroup.Shades}" SelectionChanged="DataGrid_SelectionChanged" MaxHeight="430">
+                                <DataGrid ItemsSource="{Binding ErrorGroup.Shades}" SelectedItem="{Binding SelectedColor, Mode=TwoWay}" MaxHeight="430">
                                     <DataGrid.Columns>
                                         <DataGridTemplateColumn Header="Образец цвета" Width="120">
                                             <DataGridTemplateColumn.CellTemplate>
@@ -889,7 +894,7 @@
                                             </ItemsControl.ItemsPanel>
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate>
-                                                    <Button Background="Transparent" BorderThickness="0" Padding="2" Click="SwatchButton_Click" Cursor="Hand" ToolTipService.ToolTip="{Binding Name}">
+                                                    <Button Background="Transparent" BorderThickness="0" Padding="2" Command="{Binding DataContext.SelectShadeCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}" Cursor="Hand" ToolTipService.ToolTip="{Binding Name}">
                                                         <Border Background="{Binding Brush}" CornerRadius="5" Height="42" BorderBrush="#334155" BorderThickness="1">
                                                             <TextBlock Text="{Binding Shade}" Foreground="{Binding TextBrush}" FontSize="11" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                                         </Border>
@@ -901,7 +906,7 @@
                                 </Border>
 
                                 <!-- Table 5 DataGrid -->
-                                <DataGrid ItemsSource="{Binding InfoGroup.Shades}" SelectionChanged="DataGrid_SelectionChanged" MaxHeight="430">
+                                <DataGrid ItemsSource="{Binding InfoGroup.Shades}" SelectedItem="{Binding SelectedColor, Mode=TwoWay}" MaxHeight="430">
                                     <DataGrid.Columns>
                                         <DataGridTemplateColumn Header="Образец цвета" Width="120">
                                             <DataGridTemplateColumn.CellTemplate>
@@ -965,7 +970,7 @@
                                 <Border Background="#151F30" BorderBrush="#3B82F6" BorderThickness="1" CornerRadius="8" Padding="12" Margin="0,0,0,14">
                                     <StackPanel Orientation="Vertical">
                                         <TextBlock Text="Таблица 1. Оттенки основного цвета (Primary)" FontWeight="Bold" FontSize="14" Foreground="#60A5FA" Margin="0,0,0,8"/>
-                                        <DataGrid ItemsSource="{Binding PrimaryGroup.Shades}" SelectionChanged="DataGrid_SelectionChanged" MaxHeight="430">
+                                        <DataGrid ItemsSource="{Binding PrimaryGroup.Shades}" SelectedItem="{Binding SelectedColor, Mode=TwoWay}" MaxHeight="430">
                                             <DataGrid.Columns>
                                                 <DataGridTemplateColumn Header="Образец цвета" Width="120">
                                                     <DataGridTemplateColumn.CellTemplate>
@@ -1019,7 +1024,7 @@
                                 <Border Background="#151F30" BorderBrush="#8B5CF6" BorderThickness="1" CornerRadius="8" Padding="12" Margin="0,0,0,14">
                                     <StackPanel Orientation="Vertical">
                                         <TextBlock Text="Таблица 2. Оттенки акцентного цвета (Accent)" FontWeight="Bold" FontSize="14" Foreground="#A78BFA" Margin="0,0,0,8"/>
-                                        <DataGrid ItemsSource="{Binding AccentGroup.Shades}" SelectionChanged="DataGrid_SelectionChanged" MaxHeight="430">
+                                        <DataGrid ItemsSource="{Binding AccentGroup.Shades}" SelectedItem="{Binding SelectedColor, Mode=TwoWay}" MaxHeight="430">
                                             <DataGrid.Columns>
                                                 <DataGridTemplateColumn Header="Образец цвета" Width="120">
                                                     <DataGridTemplateColumn.CellTemplate>
@@ -1073,7 +1078,7 @@
                                 <Border Background="#151F30" BorderBrush="#10B981" BorderThickness="1" CornerRadius="8" Padding="12" Margin="0,0,0,14">
                                     <StackPanel Orientation="Vertical">
                                         <TextBlock Text="Таблица 3. Оттенки индикатора успеха (Success)" FontWeight="Bold" FontSize="14" Foreground="#34D399" Margin="0,0,0,8"/>
-                                        <DataGrid ItemsSource="{Binding SuccessGroup.Shades}" SelectionChanged="DataGrid_SelectionChanged" MaxHeight="430">
+                                        <DataGrid ItemsSource="{Binding SuccessGroup.Shades}" SelectedItem="{Binding SelectedColor, Mode=TwoWay}" MaxHeight="430">
                                             <DataGrid.Columns>
                                                 <DataGridTemplateColumn Header="Образец цвета" Width="120">
                                                     <DataGridTemplateColumn.CellTemplate>
@@ -1127,7 +1132,7 @@
                                 <Border Background="#151F30" BorderBrush="#EF4444" BorderThickness="1" CornerRadius="8" Padding="12" Margin="0,0,0,14">
                                     <StackPanel Orientation="Vertical">
                                         <TextBlock Text="Таблица 4. Оттенки индикатора ошибки (Error)" FontWeight="Bold" FontSize="14" Foreground="#F87171" Margin="0,0,0,8"/>
-                                        <DataGrid ItemsSource="{Binding ErrorGroup.Shades}" SelectionChanged="DataGrid_SelectionChanged" MaxHeight="430">
+                                        <DataGrid ItemsSource="{Binding ErrorGroup.Shades}" SelectedItem="{Binding SelectedColor, Mode=TwoWay}" MaxHeight="430">
                                             <DataGrid.Columns>
                                                 <DataGridTemplateColumn Header="Образец цвета" Width="120">
                                                     <DataGridTemplateColumn.CellTemplate>
@@ -1181,7 +1186,7 @@
                                 <Border Background="#151F30" BorderBrush="#06B6D4" BorderThickness="1" CornerRadius="8" Padding="12" Margin="0,0,0,14">
                                     <StackPanel Orientation="Vertical">
                                         <TextBlock Text="Таблица 5. Оттенки индикатора информации (Info)" FontWeight="Bold" FontSize="14" Foreground="#22D3EE" Margin="0,0,0,8"/>
-                                        <DataGrid ItemsSource="{Binding InfoGroup.Shades}" SelectionChanged="DataGrid_SelectionChanged" MaxHeight="430">
+                                        <DataGrid ItemsSource="{Binding InfoGroup.Shades}" SelectedItem="{Binding SelectedColor, Mode=TwoWay}" MaxHeight="430">
                                             <DataGrid.Columns>
                                                 <DataGridTemplateColumn Header="Образец цвета" Width="120">
                                                     <DataGridTemplateColumn.CellTemplate>
@@ -1287,8 +1292,8 @@
 
                         <!-- Copy and Action Buttons -->
                         <StackPanel Grid.Column="2" VerticalAlignment="Center" Orientation="Vertical">
-                            <Button Style="{StaticResource ActionButtonStyle}" Content="Копировать HEX" Margin="0,0,0,6" Width="140" Click="CopyHex_Click"/>
-                            <Button Style="{StaticResource ActionButtonStyle}" Content="Копировать RGB" Width="140" Click="CopyRgb_Click"/>
+                            <Button Style="{StaticResource ActionButtonStyle}" Content="Копировать HEX" Margin="0,0,0,6" Width="140" Command="{Binding CopyHexCommand}"/>
+                            <Button Style="{StaticResource ActionButtonStyle}" Content="Копировать RGB" Width="140" Command="{Binding CopyRgbCommand}"/>
                         </StackPanel>
                     </Grid>
 

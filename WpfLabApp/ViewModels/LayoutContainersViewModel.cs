@@ -10,17 +10,31 @@ namespace WpfLabApp.ViewModels;
 public class LayoutContainersViewModel : ObservableObject
 {
     private Orientation _stackOrientation = Orientation.Vertical;
-    private double _wrapPanelWidth = 480;
+    private bool _isFixedStackSizes;
+    private bool _showGridLines;
+    private double _wrapPanelWidth = 420;
     private Orientation _wrapOrientation = Orientation.Horizontal;
     private bool _lastChildFill = true;
-    private double _canvasX = 40;
-    private double _canvasY = 40;
+    private double _canvasX = 140;
+    private double _canvasY = 60;
     private int _uniformGridColumns = 3;
 
     public Orientation StackOrientation
     {
         get => _stackOrientation;
         set => SetProperty(ref _stackOrientation, value);
+    }
+
+    public bool IsFixedStackSizes
+    {
+        get => _isFixedStackSizes;
+        set => SetProperty(ref _isFixedStackSizes, value);
+    }
+
+    public bool ShowGridLines
+    {
+        get => _showGridLines;
+        set => SetProperty(ref _showGridLines, value);
     }
 
     public double WrapPanelWidth

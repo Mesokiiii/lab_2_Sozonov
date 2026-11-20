@@ -56,3 +56,31 @@ public class InverseBooleanConverter : IValueConverter
         return false;
     }
 }
+
+/// <summary>
+/// Конвертер сравнения значения с параметром для привязки RadioButton к enum или числам.
+/// </summary>
+public class EqualityToBooleanConverter : IValueConverter
+{
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+    {
+        return value != null && parameter != null &&
+               string.Equals(value.ToString(), parameter.ToString(), StringComparison.Ordinal);
+    }
+
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+    {
+        if (value is true && parameter != null)
+        {
+            var paramText = parameter.ToString()!;
+            if (targetType.IsEnum)
+            {
+                return Enum.Parse(targetType, paramText);
+            }
+
+            return System.Convert.ChangeType(paramText, targetType, CultureInfo.InvariantCulture);
+        }
+
+        return Binding.DoNothing;
+    }
+}

@@ -32,8 +32,14 @@ public static class ScreenshotExporter
             RenderControl(new ControlsTabView(), 1180, 850, Path.Combine(outDir, "tab3_controls.png"));
             Console.WriteLine("Rendered tab3_controls.png");
 
+            RenderControl(new ControlsPart2View(), 1180, 1450, Path.Combine(outDir, "tab3_controls_part2.png"));
+            Console.WriteLine("Rendered tab3_controls_part2.png");
+
             RenderControl(new LayoutContainersTabView(), 1180, 950, Path.Combine(outDir, "tab4_layout.png"));
             Console.WriteLine("Rendered tab4_layout.png");
+
+            RenderControl(new BindingsTabView(), 1180, 850, Path.Combine(outDir, "tab5_bindings.png"));
+            Console.WriteLine("Rendered tab5_bindings.png");
 
             var win = new MainWindow();
             if (win.Content is UIElement winContent)

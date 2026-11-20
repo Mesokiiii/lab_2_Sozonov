@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Globalization;
 using WpfLabApp.Common;
 using WpfLabApp.Models.Personalization;
 
@@ -64,11 +65,21 @@ public class MainTabViewModel : ObservableObject
         set => SetProperty(ref _customPreviewText, value);
     }
 
-    public RelayCommand<double> SetPresetSizeCommand { get; }
+    public RelayCommand SetPresetSizeCommand { get; }
 
     public MainTabViewModel()
     {
-        SetPresetSizeCommand = new RelayCommand<double>(size => FontSize = size);
+        SetPresetSizeCommand = new RelayCommand(param =>
+        {
+            if (param is double d)
+            {
+                FontSize = d;
+            }
+            else if (double.TryParse(param?.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out double size))
+            {
+                FontSize = size;
+            }
+        });
 
         // Инициализация тем
         AvailableThemes.Add(new ThemeOption("Тёмная (Dark Slate)", "Современная глубокая тёмная палитра Slate", "#3B82F6", "DarkSlate"));

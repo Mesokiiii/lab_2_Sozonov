@@ -3,8 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:vm="clr-namespace:WpfLabApp.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="720" d:DesignWidth="1100">
+    <UserControl.DataContext>
+        <vm:MainTabViewModel/>
+    </UserControl.DataContext>
     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
         <Grid Margin="12,10,12,16">
             <Grid.RowDefinitions>
@@ -217,7 +221,7 @@
                                             Grid.Column="0" 
                                             Minimum="10" 
                                             Maximum="28" 
-                                            Value="14" 
+                                            Value="{Binding FontSize, Mode=TwoWay}" 
                                             SmallChange="1" 
                                             LargeChange="2" 
                                             TickFrequency="2" 
@@ -239,16 +243,16 @@
                                 <!-- Quick Presets -->
                                 <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
                                     <TextBlock Text="Быстрый выбор:" FontSize="11" Foreground="{StaticResource TextMutedBrush}" VerticalAlignment="Center" Margin="0,0,8,0"/>
-                                    <Button Content="11 pt" Tag="11" Click="PresetButton_Click" Style="{StaticResource SecondaryButton}" Padding="8,3" FontSize="11" Margin="0,0,4,0"/>
-                                    <Button Content="14 pt (Стандарт)" Tag="14" Click="PresetButton_Click" Style="{StaticResource SecondaryButton}" Padding="8,3" FontSize="11" Margin="0,0,4,0"/>
-                                    <Button Content="18 pt" Tag="18" Click="PresetButton_Click" Style="{StaticResource SecondaryButton}" Padding="8,3" FontSize="11" Margin="0,0,4,0"/>
-                                    <Button Content="24 pt" Tag="24" Click="PresetButton_Click" Style="{StaticResource SecondaryButton}" Padding="8,3" FontSize="11" Margin="0,0,4,0"/>
+                                    <Button Content="11 pt" Command="{Binding SetPresetSizeCommand}" CommandParameter="11" Style="{StaticResource SecondaryButton}" Padding="8,3" FontSize="11" Margin="0,0,4,0"/>
+                                    <Button Content="14 pt (Стандарт)" Command="{Binding SetPresetSizeCommand}" CommandParameter="14" Style="{StaticResource SecondaryButton}" Padding="8,3" FontSize="11" Margin="0,0,4,0"/>
+                                    <Button Content="18 pt" Command="{Binding SetPresetSizeCommand}" CommandParameter="18" Style="{StaticResource SecondaryButton}" Padding="8,3" FontSize="11" Margin="0,0,4,0"/>
+                                    <Button Content="24 pt" Command="{Binding SetPresetSizeCommand}" CommandParameter="24" Style="{StaticResource SecondaryButton}" Padding="8,3" FontSize="11" Margin="0,0,4,0"/>
                                 </StackPanel>
 
                                 <!-- Text Style Modifiers (Bold / Italic) -->
                                 <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
-                                    <CheckBox x:Name="BoldCheckBox" Content="Полужирный (Bold)" Margin="0,0,16,0"/>
-                                    <CheckBox x:Name="ItalicCheckBox" Content="Курсив (Italic)"/>
+                                    <CheckBox x:Name="BoldCheckBox" Content="Полужирный (Bold)" IsChecked="{Binding IsBold, Mode=TwoWay}" Margin="0,0,16,0"/>
+                                    <CheckBox x:Name="ItalicCheckBox" Content="Курсив (Italic)" IsChecked="{Binding IsItalic, Mode=TwoWay}"/>
                                 </StackPanel>
                             </StackPanel>
                         </StackPanel>
@@ -385,7 +389,7 @@
 
                                     <!-- Interactive User Sandbox Input -->
                                     <TextBlock Text="Проверка собственного текста:" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource TextMutedBrush}" Margin="0,0,0,4"/>
-                                    <TextBox x:Name="CustomTestInput" Text="WPF поддерживает декларативную привязку данных (Data Binding) в XAML!" Margin="0,0,0,8"/>
+                                    <TextBox x:Name="CustomTestInput" Text="{Binding CustomPreviewText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,8"/>
                                     <Border Background="#162032" BorderBrush="{StaticResource BorderBrushDefault}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,12">
                                         <TextBlock Text="{Binding ElementName=CustomTestInput, Path=Text}" 
                                                    TextWrapping="Wrap"

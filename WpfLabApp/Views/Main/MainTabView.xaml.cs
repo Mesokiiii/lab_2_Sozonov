@@ -1,4 +1,3 @@
-using System.Windows;
 using System.Windows.Controls;
 
 namespace WpfLabApp.Views
@@ -8,14 +7,6 @@ namespace WpfLabApp.Views
         public MainTabView()
         {
             InitializeComponent();
-        }
-
-        private void PresetButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (sender is Button btn && double.TryParse(btn.Tag?.ToString(), out double size))
-            {
-                FontSizeSlider.Value = size;
-            }
         }
     }
 }

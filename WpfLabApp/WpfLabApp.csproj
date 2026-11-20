@@ -8,4 +8,8 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\WpfLabResources\WpfLabResources.csproj" />
+  </ItemGroup>
+
 </Project>
